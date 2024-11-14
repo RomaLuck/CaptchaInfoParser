@@ -1,0 +1,19 @@
+{
+  "name": "Captcha Key Parsing",
+  "version": "1.0",
+  "description": "Captcha Key Parsing",
+  "manifest_version": 3,
+  "icons": {
+    "48": "icons/favicon32.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icons/favicon32.png"
+  },
+  "permissions": [
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ]
+}

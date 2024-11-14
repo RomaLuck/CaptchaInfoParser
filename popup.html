@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <link href="assets/bootstrap.min.css" rel="stylesheet">
+    <script src="assets/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="popup.css"/>
+    <title>Captcha key finder</title>
+</head>
+<body>
+<div class="container p-3">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-bs-toggle="tab" href="#cloudflare-challenge">
+                <img src="icons/cloudflare.png" alt="cloudflare" width="60" height="30">
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#google-captcha">
+                <img src="icons/google-captcha.png" alt="google-captcha" width="60" height="30">
+            </a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content p-3">
+        <div class="tab-pane container active" id="cloudflare-challenge">
+            <button id="cloudflare-button" class="btn btn-primary my-1">Get Value</button>
+            <label for="cloudflare-sitekey">
+                <input type="text" id="cloudflare-sitekey" class="form-control my-1" placeholder="sitekey" readonly>
+            </label>
+            <label for="cloudflare-data">
+                <input type="text" id="cloudflare-data" class="form-control my-1" placeholder="data" readonly>
+            </label>
+            <label for="cloudflare-pagedata">
+                <input type="text" id="cloudflare-pagedata" class="form-control my-1" placeholder="pagedata" readonly>
+            </label>
+            <label for="cloudflare-action">
+                <input type="text" id="cloudflare-action" class="form-control my-1" placeholder="action" readonly>
+            </label>
+        </div>
+        <div class="tab-pane container fade" id="google-captcha">
+            <button id="google-button" class="btn btn-primary my-1">Get Value</button>
+            <label for="google-sitekey">
+                <input type="text" id="google-sitekey" class="form-control my-1" placeholder="sitekey" readonly>
+            </label>
+            <label for="google-action">
+                <input type="text" id="google-action" class="form-control my-1" placeholder="action" readonly>
+            </label>
+        </div>
+    </div>
+
+    <script src="dist/index.js" type="module"></script>
+</div>
+</body>
+</html>
