@@ -1,5 +1,3 @@
-"use strict";
-
 document.getElementById("cloudflare-button")!.addEventListener("click", receiveData('cloudflare'));
 document.getElementById("google-button")!.addEventListener("click", receiveData('google'));
 
