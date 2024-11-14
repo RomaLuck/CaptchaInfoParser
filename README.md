@@ -40,6 +40,9 @@ Build the project
 npm run build
 ```
 
+Load the extension in Chrome
+https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked
+
 ## Screenshots
 
 ![Screenshot1](assets/images/Screenshot1.png)
