@@ -1,5 +1,5 @@
 {
-  "name": "captcha_key_parsing",
+  "name": "captcha_info_parsing",
   "version": "1.0.0",
   "type": "module",
   "scripts": {

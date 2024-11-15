@@ -8,7 +8,7 @@
 
 ## General info
 
-Chrome extension for captcha key parsing.
+Chrome extension for captcha info parsing.
 
 ## Tools
 

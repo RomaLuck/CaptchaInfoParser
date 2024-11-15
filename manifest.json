@@ -1,7 +1,7 @@
 {
-  "name": "Captcha Key Parsing",
+  "name": "Captcha Info Parsing",
   "version": "1.0",
-  "description": "Captcha Key Parsing",
+  "description": "Captcha Info Parsing",
   "manifest_version": 3,
   "icons": {
     "48": "icons/favicon32.png"

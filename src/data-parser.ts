@@ -3,46 +3,51 @@ import MessageSender = chrome.runtime.MessageSender;
 chrome.runtime.onMessage.addListener((
     message: any,
     sender: MessageSender,
-    sendResponse: (response: ParserResponseInterface) => void
+    sendResponse: (response: Object) => void
 ): void => {
-    if (message.action === "google") {
-        sendResponse(parseGoogleCaptcha());
-    } else if (message.action === "cloudflare") {
-        sendResponse(parseCloudflareCaptcha());
+    const googleCaptcha = parseGoogleCaptcha();
+    const cloudflareCaptcha = parseCloudflareCaptcha();
+
+    if (googleCaptcha) {
+        sendResponse(googleCaptcha);
+    } else if (cloudflareCaptcha) {
+        sendResponse(cloudflareCaptcha);
     } else {
-        throw new Error("Invalid action");
+        sendResponse({});
     }
 });
 
-function parseGoogleCaptcha(): ParserResponseInterface {
+function parseGoogleCaptcha(): Object | null {
     const captchaInfo = getCaptchaInfo('recaptcha');
     if (!captchaInfo) {
-        throw new Error("Google captcha not found");
+        return null;
     }
 
-    const siteKey = captchaInfo.match(/(6L[\w_]{38})/iu)?.[1] ?? '';
+    const siteKey = captchaInfo.match(/['"](6L[\w_]{38})['"]/iu)?.[1] ?? '';
     const action = captchaInfo.match(/action[":\s]+"(.+?)"/iu)?.[1] ?? '';
+    const isEnterprise = document.querySelector('[src*="google.com/recaptcha/enterprise"]') !== null;
 
     return {
-        name: "Google",
+        name: "Google reCAPTCHA",
         siteKey: siteKey,
-        action: action
+        action: action,
+        enterprise: isEnterprise,
     };
 }
 
-function parseCloudflareCaptcha(): ParserResponseInterface {
-    const captchaInfo = getCaptchaInfo('chlApiSitekey');
+function parseCloudflareCaptcha(): Object | null {
+    const captchaInfo = getCaptchaInfo('window._cf_chl_opt');
     if (!captchaInfo) {
-        throw new Error("Cloudflare captcha not found");
+        return null;
     }
 
-    const action = captchaInfo.match(/chlApiMode:\s*"(.+?)"/iu)?.[1] ?? '';
-    const siteKey = captchaInfo.match(/chlApiSitekey:\s*"(.+?)"/iu)?.[1] ?? '';
-    const cData = captchaInfo.match(/cRay:\s*"(.+?)"/iu)?.[1] ?? '';
-    const pageData = captchaInfo.match(/cH:\s*"(.+?)"/iu)?.[1] ?? '';
+    const action = captchaInfo.match(/cType:\s*['"](.+?)['"]/iu)?.[1] ?? '';
+    const cData = captchaInfo.match(/cRay:\s*['"](.+?)['"]/iu)?.[1] ?? '';
+    const pageData = captchaInfo.match(/cH:\s*['"](.+?)['"]/iu)?.[1] ?? '';
+    const siteKey = document.body.innerHTML.match(/['"](0x\w{22})['"]/iu)?.[1] ?? '';
 
     return {
-        name: "Cloudflare",
+        name: "Cloudflare Turnstile CAPTCHA",
         siteKey: siteKey,
         cData: cData,
         pageData: pageData,

@@ -1,42 +1,49 @@
-document.getElementById("cloudflare-button")!.addEventListener("click", receiveData('cloudflare'));
-document.getElementById("google-button")!.addEventListener("click", receiveData('google'));
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        const [tab] = await chrome.tabs.query({
+            active: true,
+            lastFocusedWindow: true,
+        });
 
-function receiveData(actionName: string): () => Promise<void> {
-    return async () => {
-        try {
-            const [tab] = await chrome.tabs.query({
-                active: true,
-                lastFocusedWindow: true,
-            });
+        await chrome.scripting.executeScript({
+            target: {tabId: tab.id!},
+            files: ["dist/data-parser.js"],
+        });
 
-            await chrome.scripting.executeScript({
-                target: {tabId: tab.id!},
-                files: ["dist/data-parser.js"],
-            });
+        const response: Object = await chrome.tabs.sendMessage(tab.id!, {});
 
-            const response: ParserResponseInterface = await chrome.tabs.sendMessage(tab.id!, {
-                action: actionName,
-            });
+        handleResponse(response);
+    } catch (error) {
+        console.error("Error: ", error);
+    }
+});
 
-            handleResponse(response);
-        } catch (error) {
-            console.error("Error: ", error);
-        }
-    };
-}
 
-function handleResponse(response: ParserResponseInterface): void {
+function handleResponse(response: Object): void {
     if (response) {
-        if (response.error) {
-            console.error(response.error);
-        } else if (response.name === "Google") {
-            (document.getElementById("google-action") as HTMLInputElement).value = response.action!;
-            (document.getElementById("google-sitekey") as HTMLInputElement).value = response.siteKey!;
-        } else if (response.name === "Cloudflare") {
-            (document.getElementById("cloudflare-action") as HTMLInputElement).value = response.action!;
-            (document.getElementById("cloudflare-sitekey") as HTMLInputElement).value = response.siteKey!;
-            (document.getElementById("cloudflare-cdata") as HTMLInputElement).value = response.cData!;
-            (document.getElementById("cloudflare-pagedata") as HTMLInputElement).value = response.pageData!;
+        const cardText = document.getElementById('card-text')!;
+        const listGroup = document.getElementById('list-group')!;
+
+        const arrayObject = Object.entries(response);
+        console.log(arrayObject);
+        if (arrayObject.length !== 0) {
+            cardText.textContent = 'Captcha was found on this page.';
+
+            const cardImage = document.getElementById('card-img-top')! as HTMLImageElement;
+            if (arrayObject[0][0] === 'name' && arrayObject[0][1] === 'Google reCAPTCHA') {
+                cardImage.src = 'assets/images/google.png';
+            } else if (arrayObject[0][0] === 'name' && arrayObject[0][1] === 'Cloudflare Turnstile CAPTCHA') {
+                cardImage.src = 'assets/images/cloudflare.png';
+            }
+
+            arrayObject.forEach(([key, value]) => {
+                const listElement = document.createElement('li');
+                listElement.classList.add('list-group-item');
+                listElement.textContent = `${key}: ${value}`;
+                listGroup.appendChild(listElement);
+            });
+        } else {
+            cardText.textContent = 'Captcha was not found on this page.';
         }
     } else {
         console.error("Invalid response from content script");
