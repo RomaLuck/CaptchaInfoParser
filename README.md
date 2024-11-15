@@ -25,7 +25,7 @@ Chrome extension for captcha info parsing.
 
 ### Clone the repository
 ```
-git clone git@github.com:RomaLuck/CaptchaKeyParser.git
+git clone git@github.com:RomaLuck/CaptchaInfoParser.git
 ```
 
 Install Packages

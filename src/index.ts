@@ -25,7 +25,6 @@ function handleResponse(response: Object): void {
         const listGroup = document.getElementById('list-group')!;
 
         const arrayObject = Object.entries(response);
-        console.log(arrayObject);
         if (arrayObject.length !== 0) {
             cardText.textContent = 'Captcha was found on this page.';
 
