@@ -25,7 +25,7 @@ function parseGoogleCaptcha(): Object | null {
 
     const siteKey = captchaInfo.match(/['"](6L[\w_]{38})['"]/iu)?.[1] ?? '';
     const action = captchaInfo.match(/action[":\s]+"(.+?)"/iu)?.[1] ?? '';
-    const isEnterprise = document.querySelector('[src*="google.com/recaptcha/enterprise"]') !== null;
+    const isEnterprise = document.body.innerHTML.match(/https:\/\/www\.google\.com\/recaptcha\/enterprise/iu)?.[1] !== null;
 
     return {
         name: "Google reCAPTCHA",
